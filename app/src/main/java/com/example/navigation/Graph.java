@@ -1,6 +1,7 @@
 package com.example.navigation;
 
 import android.os.Bundle;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,7 +12,8 @@ public class Graph extends AppCompatActivity {
 
     private int V;   // No. of vertices
     private LinkedList<Integer> adj[]; //Adjacency Lists
-
+    EditText src;
+    EditText des;
     // Constructor
     Graph(int v)
     {
@@ -26,6 +28,9 @@ public class Graph extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        src= (EditText) findViewById(R.id.src);
+        des = (EditText) findViewById(R.id.des);
 
         Graph g = new Graph(4);
 
