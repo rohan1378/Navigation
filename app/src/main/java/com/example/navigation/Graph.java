@@ -5,6 +5,7 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -31,6 +32,9 @@ public class Graph extends AppCompatActivity {
 
         src= (EditText) findViewById(R.id.src);
         des = (EditText) findViewById(R.id.des);
+
+        int s = Integer.parseInt(src.getText().toString());
+        int d = Integer.parseInt(src.getText().toString());
 
         Graph g = new Graph(4);
 
@@ -64,7 +68,7 @@ public class Graph extends AppCompatActivity {
         System.out.println("Following is Breadth First Traversal "+
                 "(starting from vertex 2)");
 
-        g.BFS(2);
+        g.BFS(s, d);
     }
 
 
@@ -76,11 +80,16 @@ public class Graph extends AppCompatActivity {
     }
 
     // prints BFS traversal from a given source s
-    void BFS(int s)
+    void BFS(int s, int d)
     {
+
         // Mark all the vertices as not visited(By default
         // set as false)
         boolean visited[] = new boolean[V];
+
+        boolean parent[] = new boolean[V];
+        for (int i = 0; i<parent.length; i++)
+            parent[i] = true;
 
         // Create a queue for BFS
         LinkedList<Integer> queue = new LinkedList<Integer>();
@@ -93,20 +102,25 @@ public class Graph extends AppCompatActivity {
         {
             // Dequeue a vertex from queue and print it
             s = queue.poll();
-            System.out.print(s+" ");
+
+            if (s == d)
+                System.out.print(s+" ");
 
             // Get all adjacent vertices of the dequeued vertex s
             // If a adjacent has not been visited, then mark it
             // visited and enqueue it
             Iterator<Integer> i = adj[s].listIterator();
+            int count=0;
             while (i.hasNext())
             {
                 int n = i.next();
                 if (!visited[n])
                 {
+                    parent[count]=false;
                     visited[n] = true;
                     queue.add(n);
                 }
+                count++;
             }
         }
     }
