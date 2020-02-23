@@ -8,6 +8,7 @@ public class NodeWeighted {
     // be whatever you need
     int n;
     String name;
+
     private boolean visited;
     LinkedList<EdgeWeighted> edges;
 

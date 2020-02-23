@@ -63,7 +63,7 @@ public class GraphWeighted {
             System.out.print("Node " + node.name + " has edges to: ");
 
             for (EdgeWeighted edge : edges) {
-                System.out.print(edge.destination.name + "(" + edge.weight + ") + (" + edge.direction + ") ");
+                System.out.print(edge.destination.name + "(" + edge.weight + ") ");
             }
             System.out.println();
         }
@@ -148,7 +148,7 @@ public class GraphWeighted {
                     // Since our changedAt map keeps track of child -> parent relations
                     // in order to print the path we need to add the parent before the child and
                     // it's descendants
-                    path = parent.name + " " + path;
+                    path = parent.name  + " " + path;
                     child = parent;
                 }
                 System.out.println(path);
