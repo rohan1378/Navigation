@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -33,9 +34,11 @@ public class MainActivity extends AppCompatActivity {
                 int source = Integer.parseInt(src.getText().toString());
                 int dest = Integer.parseInt(des.getText().toString());
 
+                NodeWeighted s = null;
+                NodeWeighted d = null;
 
-                NodeWeighted s = new NodeWeighted(source, src.getText().toString());
-                NodeWeighted d = new NodeWeighted(dest, des.getText().toString());
+
+                HashMap<Integer, NodeWeighted> map = new HashMap<>();
 
 
                 GraphWeighted graphWeighted = new GraphWeighted(true);
@@ -46,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
                 NodeWeighted four = new NodeWeighted(4, "4");
                 NodeWeighted five = new NodeWeighted(5, "5");
                 NodeWeighted six = new NodeWeighted(6, "6");
+
+
                 // Our addEdge method automatically adds Nodes as well.
                 // The addNode method is only there for unconnected Nodes,
                 // if we wish to add any
@@ -61,7 +66,20 @@ public class MainActivity extends AppCompatActivity {
                 graphWeighted.addEdge(five, four, 1, "S");
                 graphWeighted.addEdge(five, six, 8, "S");
 
-                graphWeighted.DijkstraShortestPath(zero, six);
+                map.put(0, zero);
+                map.put(1, one);
+                map.put(2, two);
+                map.put(3, three);
+                map.put(4, four);
+                map.put(5, five);
+                map.put(6, six);
+
+
+            s = map.get(source);
+            d = map.get(dest);
+
+
+                graphWeighted.DijkstraShortestPath(s, d);
             }
 
         });
