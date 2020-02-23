@@ -1,9 +1,15 @@
 package com.example.navigation;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class GraphWeighted {
@@ -107,6 +113,9 @@ public class GraphWeighted {
             else shortestPathMap.put(node, Double.POSITIVE_INFINITY);
         }
 
+        ArrayList<String> dir = new ArrayList<String>();
+
+
         // Now we go through all the nodes we can go to from the starting node
         // (this keeps the loop a bit simpler)
         for (EdgeWeighted edge : start.edges) {
@@ -139,6 +148,12 @@ public class GraphWeighted {
                 // repeatedly adding to the beginning of the string
                 // defeats the purpose of using StringBuilder
                 String path = end.name;
+
+
+
+                HashMap<NodeWeighted, Double> shortestPathMapasc = sortByValue(shortestPathMap);
+
+                int i = 0;
                 while (true) {
                     NodeWeighted parent = changedAt.get(child);
                     if (parent == null) {
@@ -150,6 +165,7 @@ public class GraphWeighted {
                     // it's descendants
                     path = parent.name  + " " + path;
                     child = parent;
+                    i++;
                 }
                 System.out.println(path);
                 System.out.println("The path costs: " + shortestPathMap.get(end));
@@ -173,6 +189,29 @@ public class GraphWeighted {
                 }
             }
         }
+    }
+
+    public static HashMap<NodeWeighted, Double> sortByValue(HashMap<NodeWeighted, Double> hm)
+    {
+        // Create a list from elements of HashMap
+        List<Map.Entry<NodeWeighted, Double> > list =
+                new LinkedList<Map.Entry<NodeWeighted, Double> >(hm.entrySet());
+
+        // Sort the list
+        Collections.sort(list, new Comparator<Map.Entry<NodeWeighted, Double> >() {
+            public int compare(Map.Entry<NodeWeighted, Double> o1,
+                               Map.Entry<NodeWeighted, Double> o2)
+            {
+                return (o1.getValue()).compareTo(o2.getValue());
+            }
+        });
+
+        // put data from sorted list to hashmap
+        HashMap<NodeWeighted, Double> temp = new LinkedHashMap<NodeWeighted, Double>();
+        for (Map.Entry<NodeWeighted, Double> aa : list) {
+            temp.put(aa.getKey(), aa.getValue());
+        }
+        return temp;
     }
 
     private NodeWeighted closestReachableUnvisited(HashMap<NodeWeighted, Double> shortestPathMap) {
