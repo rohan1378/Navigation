@@ -1,5 +1,8 @@
 package com.example.navigation;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -94,7 +97,7 @@ public class GraphWeighted {
     }
 
 
-    public void DijkstraShortestPath(NodeWeighted start, NodeWeighted end) {
+    public void DijkstraShortestPath(NodeWeighted start, NodeWeighted end, Context context) {
         // We keep track of which path gives us the shortest path for each node
         // by keeping track how we arrived at a particular node, we effectively
         // keep a "pointer" to the parent node of each node, and we follow that
@@ -134,6 +137,8 @@ public class GraphWeighted {
             // (they aren't connected)
             if (currentNode == null) {
                 System.out.println("There isn't a path between " + start.name + " and " + end.name);
+                Toast toast0 =  Toast.makeText(context, "There isn't a path between " + start.name + " and " + end.name, Toast.LENGTH_LONG);
+               toast0.show();
                 return;
             }
 
@@ -141,6 +146,10 @@ public class GraphWeighted {
             if (currentNode == end) {
                 System.out.println("The path with the smallest weight between "
                         + start.name + " and " + end.name + " is:");
+
+                Toast toast1 =  Toast.makeText(context, "The path with the smallest weight between "
+                        + start.name + " and " + end.name + " is:", Toast.LENGTH_LONG);
+                toast1.show();
 
                 NodeWeighted child = end;
 
@@ -168,7 +177,14 @@ public class GraphWeighted {
                     i++;
                 }
                 System.out.println(path);
+                Toast toast2 =  Toast.makeText(context, path, Toast.LENGTH_LONG);
+                toast2.show();
+
+
                 System.out.println("The path costs: " + shortestPathMap.get(end));
+                Toast toast3 =  Toast.makeText(context, "The path costs: " + shortestPathMap.get(end), Toast.LENGTH_LONG);
+                toast3.show();
+
                 return;
             }
             currentNode.visit();

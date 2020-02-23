@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             d = map.get(dest);
 
 
-                graphWeighted.DijkstraShortestPath(s, d);
+                graphWeighted.DijkstraShortestPath(s, d, getApplicationContext());
             }
 
         });
