@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 // Our addEdge method automatically adds Nodes as well.
                 // The addNode method is only there for unconnected Nodes,
                 // if we wish to add any
-                graphWeighted.addEdge(zero, one, 9, "S");
+                graphWeighted.addEdge(zero, one, 8, "S");
                 graphWeighted.addEdge(zero, two, 11, "S");
                 graphWeighted.addEdge(one, three, 3, "S");
                 graphWeighted.addEdge(one, four, 8, "S");

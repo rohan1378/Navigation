@@ -9,9 +9,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -159,8 +161,21 @@ public class GraphWeighted {
                 String path = end.name;
 
 
+                HashMap<Double, NodeWeighted> shortestPathMapasc = sortByValue(shortestPathMap);
+                Set<Double> keys = shortestPathMapasc.keySet(); // The set of keys in the map.
 
-                HashMap<NodeWeighted, Double> shortestPathMapasc = sortByValue(shortestPathMap);
+                HashMap<NodeWeighted, Double> Pat = new LinkedHashMap<NodeWeighted, Double>();
+
+                Iterator<Double> keyIter = keys.iterator();
+
+                while (keyIter.hasNext()) {
+                    Double key = keyIter.next();
+                    NodeWeighted value = shortestPathMapasc.get(key);
+                    Pat.put(value, key);
+                }
+
+
+                ArrayList<String> direction = direction(Pat);
 
                 int i = 0;
                 while (true) {
@@ -207,7 +222,37 @@ public class GraphWeighted {
         }
     }
 
-    public static HashMap<NodeWeighted, Double> sortByValue(HashMap<NodeWeighted, Double> hm)
+    private ArrayList<String> direction(HashMap<NodeWeighted, Double> hm)
+    {
+
+        ArrayList<String> dir = new ArrayList<String>();
+        Iterator it = hm.entrySet().iterator();
+
+        Map.Entry pair = (Map.Entry) it.next();
+        NodeWeighted nd = (NodeWeighted) pair.getKey();
+
+        for (int i = 0; i<hm.size()-1; i++) {
+            LinkedList<EdgeWeighted> ele = nd.edges;
+            // Iterating through the created list from the position
+            NodeWeighted no = (NodeWeighted) ((Map.Entry) it.next()).getKey();
+
+
+            int r = no.n;
+            for (int j = 0; j<ele.size(); j++)
+            {
+                NodeWeighted sr = ele.get(j).destination;
+                int test = sr.n;
+                if(test == r)
+                    dir.add(ele.get(j).direction);
+            }
+
+            nd = no;
+            //it.remove(); // avoids a ConcurrentModificationException
+        }
+        return dir;
+    }
+
+    public static HashMap<Double, NodeWeighted> sortByValue(HashMap<NodeWeighted, Double> hm)
     {
         // Create a list from elements of HashMap
         List<Map.Entry<NodeWeighted, Double> > list =
@@ -227,7 +272,19 @@ public class GraphWeighted {
         for (Map.Entry<NodeWeighted, Double> aa : list) {
             temp.put(aa.getKey(), aa.getValue());
         }
-        return temp;
+
+        Set<NodeWeighted> keys = temp.keySet(); // The set of keys in the map.
+
+        HashMap<Double, NodeWeighted> temp2 = new LinkedHashMap<Double, NodeWeighted>();
+
+        Iterator<NodeWeighted> keyIter = keys.iterator();
+
+        while (keyIter.hasNext()) {
+            NodeWeighted key = keyIter.next();
+            Double value = temp.get(key);
+            temp2.put(value, key);
+        }
+        return temp2;
     }
 
     private NodeWeighted closestReachableUnvisited(HashMap<NodeWeighted, Double> shortestPathMap) {
