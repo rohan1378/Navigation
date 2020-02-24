@@ -187,13 +187,15 @@ public class GraphWeighted {
                     // Since our changedAt map keeps track of child -> parent relations
                     // in order to print the path we need to add the parent before the child and
                     // it's descendants
-                    if (i < direction.size())
-                        path = parent.name  + direction.get(i) + " " + path;
+                    if (i < direction.size()) {
+                        path = parent.name + direction.get(i) + " " + path;
+                        i++;
+                    }
 
-                    else
-                        path = parent.name  + " " + path;
-                    child = parent;
-                    i++;
+                    else {
+                        path = parent.name + " " + path;
+                        child = parent;
+                    }
                 }
                 System.out.println(path);
 
