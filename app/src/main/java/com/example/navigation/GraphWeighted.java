@@ -187,11 +187,16 @@ public class GraphWeighted {
                     // Since our changedAt map keeps track of child -> parent relations
                     // in order to print the path we need to add the parent before the child and
                     // it's descendants
-                    path = parent.name  + " " + path;
+                    if (i < direction.size())
+                        path = parent.name  + direction.get(i) + " " + path;
+
+                    else
+                        path = parent.name  + " " + path;
                     child = parent;
                     i++;
                 }
                 System.out.println(path);
+
                 Toast toast2 =  Toast.makeText(context, path, Toast.LENGTH_LONG);
                 toast2.show();
 
