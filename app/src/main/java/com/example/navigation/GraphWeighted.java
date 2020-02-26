@@ -225,15 +225,13 @@ public class GraphWeighted {
                             dw = k.getString(k.getColumnIndex("Direction"));
                         }
                         k.close();
-                        path = parent.name  + path;
-
-                    System.out.println(k);
+                        path = parent.name  + " " + dw + " "+ path;
                         child = parent;
                     //}
 
 
                 }
-                System.out.println(direction.toString());
+                /*System.out.println(direction.toString());
                 int k=0;
                 for(int j=0;j<path.length();j++) {
                     if(k<direction.size()&& path.charAt(j)!=' ') {
@@ -245,14 +243,15 @@ public class GraphWeighted {
 
                     }
 
-                }
+                }*/
+
                 System.out.println(path);
-                System.out.println(d.toString());
-                direction.clear();
+                //System.out.println(d.toString());
+                //direction.clear();
 
 
 
-                Toast toast2 =  Toast.makeText(context, d.toString() , Toast.LENGTH_LONG);
+                Toast toast2 =  Toast.makeText(context, path , Toast.LENGTH_LONG);
                 toast2.show();
 
 
