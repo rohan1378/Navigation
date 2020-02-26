@@ -69,9 +69,6 @@ public class Database extends SQLiteOpenHelper {
         contentValues.put(COL_4, weight);
         contentValues.put(COL_5, Direction);
 
-
-
-
         Log.d(TAG, "addData: Adding " + Source + "," + Destination + "," + weight + "," + Destination + " to " + TABLE_NAME);
 
         long result = db.insert(TABLE_NAME, null, contentValues);
@@ -128,8 +125,5 @@ public class Database extends SQLiteOpenHelper {
         Log.d(TAG, "deleteName: Deleting " + name + " from database.");
         db.execSQL(query);
     }
-
-
-
 
 }

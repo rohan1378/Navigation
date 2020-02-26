@@ -24,24 +24,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);// Java program to print BFS traversal from a given source vertex.
         submit = findViewById(R.id.getData);
 
-        src= (EditText) findViewById(R.id.src);
-        des = (EditText) findViewById(R.id.des);
+
+
         mDatabaseHelper = new Database(this);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-
-                int source = Integer.parseInt(src.getText().toString());
-                int dest = Integer.parseInt(des.getText().toString());
-
-                NodeWeighted s = null;
-                NodeWeighted d = null;
-
-
-                HashMap<Integer, NodeWeighted> map = new HashMap<>();
-
-
+                // NODES AND EDGES ---- GRAPH STUFF ----- NODES AND EDGES
                 GraphWeighted graphWeighted = new GraphWeighted(true);
                 NodeWeighted one = new NodeWeighted(1, "1");
                 NodeWeighted two = new NodeWeighted(2, "2");
@@ -68,9 +58,6 @@ public class MainActivity extends AppCompatActivity {
                 // Our addEdge method automatically adds Nodes as well.
                 // The addNode method is only there for unconnected Nodes,
                 // if we wish to add any
-
-
-
                 graphWeighted.addEdge(one, two, 2,"S");
                 graphWeighted.addEdge(two, three, 2,"L");
                 graphWeighted.addEdge(three, four, 2,"S");
@@ -94,8 +81,45 @@ public class MainActivity extends AppCompatActivity {
                 graphWeighted.addEdge(sixteen, seventeen, 2,"S");
                 graphWeighted.addEdge(seventeen, eighteen, 2,"S");
                 graphWeighted.addEdge(eighteen, nineteen, 2,"L");
+                // NODES AND EDGES ---- GRAPH STUFF ----- NODES AND EDGES
 
 
+                //To parse in source and dest later
+                src= (EditText) findViewById(R.id.src);
+                des = (EditText) findViewById(R.id.des);
+                int source = Integer.parseInt(src.getText().toString());
+                int dest = Integer.parseInt(des.getText().toString());
+                HashMap<Integer, NodeWeighted> map = new HashMap<>();
+                map.put(1, one);
+                map.put(2, two);
+                map.put(3, three);
+                map.put(4, four);
+                map.put(5, five);
+                map.put(6, six);
+                map.put(7, seven);
+                map.put(8, eight);
+                map.put(9, nine);
+                map.put(10, ten);
+                map.put(11, eleven);
+                map.put(12, twelve);
+                map.put(13, thirteen);
+                map.put(14, fourteen);
+                map.put(15, fifteen);
+                map.put(16, sixteen);
+                map.put(17, seventeen);
+                map.put(18, eighteen);
+                map.put(19, nineteen);
+                map.put(20, twenty);
+
+
+                final NodeWeighted s;
+                final NodeWeighted d ;
+
+                s = map.get(source);
+                d = map.get(dest);
+                // USER INPUT
+
+                //DATABASE STUFF
                 mDatabaseHelper.addData("1", "2", 2.0,"S");
                 mDatabaseHelper.addData("2", "3", 2.0,"L");
                 mDatabaseHelper.addData("3", "4", 2.0,"S");
@@ -119,35 +143,7 @@ public class MainActivity extends AppCompatActivity {
                 mDatabaseHelper.addData("16", "17", 2.0,"S");
                 mDatabaseHelper.addData("17", "18", 2.0,"S");
                 mDatabaseHelper.addData("18", "19", 2.0,"L");
-
-
-
-
-                map.put(1, one);
-                map.put(2, two);
-                map.put(3, three);
-                map.put(4, four);
-                map.put(5, five);
-                map.put(6, six);
-                map.put(7, seven);
-                map.put(8, eight);
-                map.put(9, nine);
-                map.put(10, ten);
-                map.put(11, eleven);
-                map.put(12, twelve);
-                map.put(13, thirteen);
-                map.put(14, fourteen);
-                map.put(15, fifteen);
-                map.put(16, sixteen);
-                map.put(17, seventeen);
-                map.put(18, eighteen);
-                map.put(19, nineteen);
-                map.put(20, twenty);
-
-
-                s = map.get(source);
-                d = map.get(dest);
-
+                //DATABASE STUFF
 
                 graphWeighted.DijkstraShortestPath(s, d, getApplicationContext());
             }

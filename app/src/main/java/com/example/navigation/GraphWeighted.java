@@ -28,13 +28,6 @@ public class GraphWeighted {
         nodes = new HashSet<>();
     }
 
-    public void addNode(NodeWeighted... n) {
-        // We're using a var arg method so we don't have to call
-        // addNode repeatedly
-        nodes.addAll(Arrays.asList(n));
-    }
-
-
     public void addEdge(NodeWeighted source, NodeWeighted destination, double weight, String direction) {
         // Since we're using a Set, it will only add the nodes
         // if they don't already exist in our graph
@@ -65,41 +58,6 @@ public class GraphWeighted {
         a.edges.add(new EdgeWeighted(a, b, weight, direction));
     }
 
-    public void printEdges() {
-        for (NodeWeighted node : nodes) {
-            LinkedList<EdgeWeighted> edges = node.edges;
-
-            if (edges.isEmpty()) {
-                System.out.println("Node " + node.name + " has no edges.");
-                continue;
-            }
-            System.out.print("Node " + node.name + " has edges to: ");
-
-            for (EdgeWeighted edge : edges) {
-                System.out.print(edge.destination.name + "(" + edge.weight + ") ");
-            }
-            System.out.println();
-        }
-    }
-
-    public boolean hasEdge(NodeWeighted source, NodeWeighted destination) {
-        LinkedList<EdgeWeighted> edges = source.edges;
-        for (EdgeWeighted edge : edges) {
-            // Again relying on the fact that all classes share the
-            // exact same NodeWeighted object
-            if (edge.destination == destination) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void resetNodesVisited() {
-        for (NodeWeighted node : nodes) {
-            node.unvisit();
-        }
-    }
-
 
     public void DijkstraShortestPath(NodeWeighted start, NodeWeighted end, Context context) {
         // We keep track of which path gives us the shortest path for each node
@@ -121,8 +79,6 @@ public class GraphWeighted {
                 shortestPathMap.put(start, 0.0);
             else shortestPathMap.put(node, Double.POSITIVE_INFINITY);
         }
-
-        ArrayList<String> dir = new ArrayList<String>();
 
 
         // Now we go through all the nodes we can go to from the starting node
@@ -164,44 +120,11 @@ public class GraphWeighted {
                 // repeatedly adding to the beginning of the string
                 // defeats the purpose of using StringBuilder
                 String path = end.name;
-
-
-                HashMap<Double, NodeWeighted> shortestPathMapasc = sortByValue(shortestPathMap);
-                Set<Double> keys = shortestPathMapasc.keySet(); // The set of keys in the map.
-
-                HashMap<NodeWeighted, Double> Pat = new LinkedHashMap<NodeWeighted, Double>();
-
-                    Iterator<Double> keyIter = keys.iterator();
-
-                while (keyIter.hasNext()) {
-                    Double key = keyIter.next();
-                    NodeWeighted value = shortestPathMapasc.get(key);
-                    Pat.put(value, key);
-                }
-
-
-                ArrayList<String> direction = direction(Pat);
-
-                int i = 0;
-                StringBuilder d = new StringBuilder();
                 while (true) {
                     NodeWeighted parent = changedAt.get(child);
                     if (parent == null) {
                         break;
                     }
-
-                    // Since our changedAt map keeps track of child -> parent relations
-                    // in order to print the path we need to add the parent before the child and
-                    // it's descendants
-                    /*if (i < direction.size()) {
-                        path = parent.name + path+direction.get(i++)+" " ;
-                        child = parent;
-                        //i++;
-                    }
-
-                    else {
-
-                     */
                         String Des = null;
                         int check=0;
 
@@ -227,30 +150,10 @@ public class GraphWeighted {
                         k.close();
                         path = parent.name  + " " + dw + " "+ path;
                         child = parent;
-                    //}
-
 
                 }
-                /*System.out.println(direction.toString());
-                int k=0;
-                for(int j=0;j<path.length();j++) {
-                    if(k<direction.size()&& path.charAt(j)!=' ') {
-                        d.append(path.charAt(j)).append(direction.get(k++));
-                        d.append(" ");
-                    }
-                    else if(path.charAt(j)!=' ') {
-                        d.append(path.charAt(j));
-
-                    }
-
-                }*/
 
                 System.out.println(path);
-                //System.out.println(d.toString());
-                //direction.clear();
-
-
-
                 Toast toast2 =  Toast.makeText(context, path , Toast.LENGTH_LONG);
                 toast2.show();
 
@@ -258,15 +161,10 @@ public class GraphWeighted {
                 System.out.println("The path costs: " + shortestPathMap.get(end));
                 Toast toast3 =  Toast.makeText(context, "The path costs: " + shortestPathMap.get(end), Toast.LENGTH_LONG);
                 toast3.show();
-                d.setLength(0);
                 return;
             }
 
             currentNode.visit();
-
-            // Now we go through all the unvisited nodes our current node has an edge to
-            // and check whether its shortest path value is better when going through our
-            // current node than whatever we had before
             for (EdgeWeighted edge : currentNode.edges) {
                 if (edge.destination.isVisited())
                     continue;
@@ -280,71 +178,6 @@ public class GraphWeighted {
                 }
             }
         }
-    }
-
-    private ArrayList<String> direction(HashMap<NodeWeighted, Double> hm)
-    {
-
-        ArrayList<String> dir = new ArrayList<String>();
-        Iterator it = hm.entrySet().iterator();
-
-        Map.Entry pair = (Map.Entry) it.next();
-        NodeWeighted nd = (NodeWeighted) pair.getKey();
-
-        for (int i = 0; i<hm.size()-1; i++) {
-            LinkedList<EdgeWeighted> ele = nd.edges;
-            // Iterating through the created list from the position
-            NodeWeighted no = (NodeWeighted) ((Map.Entry) it.next()).getKey();
-
-
-            int r = no.n;
-            for (int j = 0; j<ele.size(); j++)
-            {
-                NodeWeighted sr = ele.get(j).destination;
-                int test = sr.n;
-                if(test == r)
-                    dir.add(ele.get(j).direction);
-            }
-
-            nd = no;
-            //it.remove(); // avoids a ConcurrentModificationException
-        }
-        return dir;
-    }
-
-    public static HashMap<Double, NodeWeighted> sortByValue(HashMap<NodeWeighted, Double> hm)
-    {
-        // Create a list from elements of HashMap
-        List<Map.Entry<NodeWeighted, Double> > list =
-                new LinkedList<Map.Entry<NodeWeighted, Double> >(hm.entrySet());
-
-        // Sort the list
-        Collections.sort(list, new Comparator<Map.Entry<NodeWeighted, Double> >() {
-            public int compare(Map.Entry<NodeWeighted, Double> o1,
-                               Map.Entry<NodeWeighted, Double> o2)
-            {
-                return (o1.getValue()).compareTo(o2.getValue());
-            }
-        });
-
-        // put data from sorted list to hashmap
-        HashMap<NodeWeighted, Double> temp = new LinkedHashMap<NodeWeighted, Double>();
-        for (Map.Entry<NodeWeighted, Double> aa : list) {
-            temp.put(aa.getKey(), aa.getValue());
-        }
-
-        Set<NodeWeighted> keys = temp.keySet(); // The set of keys in the map.
-
-        HashMap<Double, NodeWeighted> temp2 = new LinkedHashMap<Double, NodeWeighted>();
-
-        Iterator<NodeWeighted> keyIter = keys.iterator();
-
-        while (keyIter.hasNext()) {
-            NodeWeighted key = keyIter.next();
-            Double value = temp.get(key);
-            temp2.put(value, key);
-        }
-        return temp2;
     }
 
     private NodeWeighted closestReachableUnvisited(HashMap<NodeWeighted, Double> shortestPathMap) {
@@ -366,4 +199,52 @@ public class GraphWeighted {
         }
         return closestReachableNode;
     }
+
+
+
+
+//UN-USED METHODS ---- UN-USED METHODS ---- //
+
+    public void addNode(NodeWeighted... n) {
+        // We're using a var arg method so we don't have to call
+        // addNode repeatedly
+        nodes.addAll(Arrays.asList(n));
+    }
+
+    public void printEdges() {
+        for (NodeWeighted node : nodes) {
+            LinkedList<EdgeWeighted> edges = node.edges;
+
+            if (edges.isEmpty()) {
+                System.out.println("Node " + node.name + " has no edges.");
+                continue;
+            }
+            System.out.print("Node " + node.name + " has edges to: ");
+
+            for (EdgeWeighted edge : edges) {
+                System.out.print(edge.destination.name + "(" + edge.weight + ") ");
+            }
+            System.out.println();
+        }
+    }
+
+    public boolean hasEdge(NodeWeighted source, NodeWeighted destination) {
+        LinkedList<EdgeWeighted> edges = source.edges;
+        for (EdgeWeighted edge : edges) {
+            // Again relying on the fact that all classes share the
+            // exact same NodeWeighted object
+            if (edge.destination == destination) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void resetNodesVisited() {
+        for (NodeWeighted node : nodes) {
+            node.unvisit();
+        }
+    }
+//UN-USED METHODS ---- UN-USED METHODS ---- //
+
 }
