@@ -1,6 +1,7 @@
 package com.example.navigation;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class GraphWeighted {
+    Database mDatabaseHelper;
     private Set<NodeWeighted> nodes;
     private boolean directed;
 
@@ -104,6 +106,8 @@ public class GraphWeighted {
         // by keeping track how we arrived at a particular node, we effectively
         // keep a "pointer" to the parent node of each node, and we follow that
         // path to the start
+        mDatabaseHelper = new Database(context);
+
         HashMap<NodeWeighted, NodeWeighted> changedAt = new HashMap<>();
         changedAt.put(start, null);
 
@@ -198,7 +202,32 @@ public class GraphWeighted {
                     else {
 
                      */
-                        path = parent.name + " " + path;
+                        String Des = null;
+                        int check=0;
+
+                        if (check == 0)
+                        {
+                            Des = currentNode.name.toString();
+                            check ++;
+                        }
+
+                        if (check>0)
+                        {
+                            Des = child.name;
+                        }
+
+
+                        String dw = null;
+
+                        Cursor k = mDatabaseHelper.getItemDirection(parent.name, Des);
+                        if (k.moveToFirst()) // data?
+                        {
+                            dw = k.getString(k.getColumnIndex("Direction"));
+                        }
+                        k.close();
+                        path = parent.name  + path;
+
+                    System.out.println(k);
                         child = parent;
                     //}
 

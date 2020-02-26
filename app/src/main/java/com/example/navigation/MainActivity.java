@@ -13,7 +13,7 @@ import java.util.LinkedList;
 
 
 public class MainActivity extends AppCompatActivity {
-
+    Database mDatabaseHelper;
     Button submit;
     EditText src;
     EditText des;
@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
         src= (EditText) findViewById(R.id.src);
         des = (EditText) findViewById(R.id.des);
+        mDatabaseHelper = new Database(this);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,11 +70,12 @@ public class MainActivity extends AppCompatActivity {
                 // if we wish to add any
 
 
+
                 graphWeighted.addEdge(one, two, 2,"S");
                 graphWeighted.addEdge(two, three, 2,"L");
                 graphWeighted.addEdge(three, four, 2,"S");
                 graphWeighted.addEdge(four, five, 2,"S");
-                graphWeighted.addEdge(five, six, 2,"R");
+                graphWeighted.addEdge(five, six, 3,"R");
                 graphWeighted.addEdge(five, seven, 2,"S");
                 graphWeighted.addEdge(seven, eight, 2,"R");
                 graphWeighted.addEdge(seven, nine, 2,"S");
@@ -92,6 +94,34 @@ public class MainActivity extends AppCompatActivity {
                 graphWeighted.addEdge(sixteen, seventeen, 2,"S");
                 graphWeighted.addEdge(seventeen, eighteen, 2,"S");
                 graphWeighted.addEdge(eighteen, nineteen, 2,"L");
+
+
+                mDatabaseHelper.addData("1", "2", 2.0,"S");
+                mDatabaseHelper.addData("2", "3", 2.0,"L");
+                mDatabaseHelper.addData("3", "4", 2.0,"S");
+                mDatabaseHelper.addData("4", "5", 2.0,"S");
+                mDatabaseHelper.addData("5", "6", 3.0,"R");
+                mDatabaseHelper.addData("5", "7", 2.0,"S");
+                mDatabaseHelper.addData("7", "8", 2.0,"R");
+                mDatabaseHelper.addData("7", "9", 2.0,"S");
+                mDatabaseHelper.addData("9", "10", 2.0,"R");
+                mDatabaseHelper.addData("9", "11", 2.0,"L");
+
+                mDatabaseHelper.addData("12", "13", 2.0,"S");
+                mDatabaseHelper.addData("13", "2", 2.0,"S");
+                mDatabaseHelper.addData("13", "14", 2.0,"L");
+                mDatabaseHelper.addData("14", "6", 2.0,"R");
+                mDatabaseHelper.addData("15", "13", 2.0,"S");
+                mDatabaseHelper.addData("15", "8", 2.0,"R");
+                mDatabaseHelper.addData("15", "16", 2.0,"S");
+                mDatabaseHelper.addData("16", "10", 2.0,"R");
+                mDatabaseHelper.addData("16", "20", 2.0,"L");
+                mDatabaseHelper.addData("16", "17", 2.0,"S");
+                mDatabaseHelper.addData("17", "18", 2.0,"S");
+                mDatabaseHelper.addData("18", "19", 2.0,"L");
+
+
+
 
                 map.put(1, one);
                 map.put(2, two);

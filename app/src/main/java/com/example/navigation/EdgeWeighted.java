@@ -34,5 +34,10 @@ public class EdgeWeighted implements Comparable<EdgeWeighted> {
         }
         else return -1;
     }
+
+    public String getDirection(NodeWeighted p, NodeWeighted c){
+        return "";
+    }
+
     }
 
