@@ -144,6 +144,7 @@ public class GraphWeighted {
                 return;
             }
 
+
             // If the closest non-visited node is our destination, we want to print the path
             if (currentNode == end) {
                 System.out.println("The path with the smallest weight between "
@@ -166,7 +167,7 @@ public class GraphWeighted {
 
                 HashMap<NodeWeighted, Double> Pat = new LinkedHashMap<NodeWeighted, Double>();
 
-                Iterator<Double> keyIter = keys.iterator();
+                    Iterator<Double> keyIter = keys.iterator();
 
                 while (keyIter.hasNext()) {
                     Double key = keyIter.next();
@@ -178,6 +179,7 @@ public class GraphWeighted {
                 ArrayList<String> direction = direction(Pat);
 
                 int i = 0;
+                StringBuilder d = new StringBuilder();
                 while (true) {
                     NodeWeighted parent = changedAt.get(child);
                     if (parent == null) {
@@ -187,28 +189,51 @@ public class GraphWeighted {
                     // Since our changedAt map keeps track of child -> parent relations
                     // in order to print the path we need to add the parent before the child and
                     // it's descendants
-                    if (i < direction.size()) {
-                        path = parent.name + direction.get(i) + " " + path;
-                        i++;
+                    /*if (i < direction.size()) {
+                        path = parent.name + path+direction.get(i++)+" " ;
+                        child = parent;
+                        //i++;
                     }
 
                     else {
+
+                     */
                         path = parent.name + " " + path;
                         child = parent;
+                    //}
+
+
+                }
+                System.out.println(direction.toString());
+                int k=0;
+                for(int j=0;j<path.length();j++) {
+                    if(k<direction.size()&& path.charAt(j)!=' ') {
+                        d.append(path.charAt(j)).append(direction.get(k++));
+                        d.append(" ");
                     }
+                    else if(path.charAt(j)!=' ') {
+                        d.append(path.charAt(j));
+
+                    }
+
                 }
                 System.out.println(path);
+                System.out.println(d.toString());
+                direction.clear();
 
-                Toast toast2 =  Toast.makeText(context, path, Toast.LENGTH_LONG);
+
+
+                Toast toast2 =  Toast.makeText(context, d.toString() , Toast.LENGTH_LONG);
                 toast2.show();
 
 
                 System.out.println("The path costs: " + shortestPathMap.get(end));
                 Toast toast3 =  Toast.makeText(context, "The path costs: " + shortestPathMap.get(end), Toast.LENGTH_LONG);
                 toast3.show();
-
+                d.setLength(0);
                 return;
             }
+
             currentNode.visit();
 
             // Now we go through all the unvisited nodes our current node has an edge to
