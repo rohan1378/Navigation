@@ -23,7 +23,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String COL_5 = "Direction";
 
     public Database(Context context) {
-        super(context, DATABASE_NAME, null, 1);
+        super(context, DATABASE_NAME, null, 2);
     }
 
     @Override
@@ -33,9 +33,9 @@ public class Database extends SQLiteOpenHelper {
                 COL_3 +" TEXT ," +
                 COL_4 +" REAL ," +
                 COL_5 +" TEXT)";
-        sqLiteDatabase.beginTransaction();
+
         sqLiteDatabase.execSQL(createTable);
-        sqLiteDatabase.endTransaction();
+
     }
 
     @Override
