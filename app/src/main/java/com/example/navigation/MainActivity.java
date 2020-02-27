@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,12 +18,14 @@ public class MainActivity extends AppCompatActivity {
     Button submit;
     EditText src;
     EditText des;
+    TextView path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);// Java program to print BFS traversal from a given source vertex.
         submit = findViewById(R.id.getData);
+        path = findViewById(R.id.output);
 
 
 
@@ -145,7 +148,8 @@ public class MainActivity extends AppCompatActivity {
                 mDatabaseHelper.addData("18", "19", 2.0,"L");
                 //DATABASE STUFF
 
-                graphWeighted.DijkstraShortestPath(s, d, getApplicationContext());
+                String p = graphWeighted.DijkstraShortestPath(s, d, getApplicationContext());
+                path.setText(p);
             }
 
         });

@@ -59,11 +59,12 @@ public class GraphWeighted {
     }
 
 
-    public void DijkstraShortestPath(NodeWeighted start, NodeWeighted end, Context context) {
+    public String DijkstraShortestPath(NodeWeighted start, NodeWeighted end, Context context) {
         // We keep track of which path gives us the shortest path for each node
         // by keeping track how we arrived at a particular node, we effectively
         // keep a "pointer" to the parent node of each node, and we follow that
         // path to the start
+        String path = null;
         mDatabaseHelper = new Database(context);
 
         HashMap<NodeWeighted, NodeWeighted> changedAt = new HashMap<>();
@@ -101,7 +102,6 @@ public class GraphWeighted {
                 System.out.println("There isn't a path between " + start.name + " and " + end.name);
                 Toast toast0 =  Toast.makeText(context, "There isn't a path between " + start.name + " and " + end.name, Toast.LENGTH_LONG);
                toast0.show();
-                return;
             }
 
 
@@ -119,7 +119,7 @@ public class GraphWeighted {
                 // It makes no sense to use StringBuilder, since
                 // repeatedly adding to the beginning of the string
                 // defeats the purpose of using StringBuilder
-                String path = end.name;
+                path = end.name;
                 while (true) {
                     NodeWeighted parent = changedAt.get(child);
                     if (parent == null) {
@@ -158,10 +158,11 @@ public class GraphWeighted {
                 toast2.show();
 
 
+
                 System.out.println("The path costs: " + shortestPathMap.get(end));
                 Toast toast3 =  Toast.makeText(context, "The path costs: " + shortestPathMap.get(end), Toast.LENGTH_LONG);
                 toast3.show();
-                return;
+                return path;
             }
 
             currentNode.visit();
@@ -178,6 +179,7 @@ public class GraphWeighted {
                 }
             }
         }
+
     }
 
     private NodeWeighted closestReachableUnvisited(HashMap<NodeWeighted, Double> shortestPathMap) {
