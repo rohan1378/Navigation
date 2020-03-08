@@ -4,8 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Picture;
+import android.graphics.drawable.PictureDrawable;
+import android.net.http.SslError;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.SslErrorHandler;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -21,17 +30,22 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity {
     Database mDatabaseHelper;
     Button submit;
+    Button classi;
     EditText src;
     EditText des;
     TextView path;
+    WebView webview;
     public static HashMap<Integer, String> dic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        WebView.enableSlowWholeDocumentDraw();
         setContentView(R.layout.activity_main);// Java program to print BFS traversal from a given source vertex.
+        //com.makor.hotornot.MainActivity.setContext(this);
         submit = findViewById(R.id.getData);
         path = findViewById(R.id.output);
+        classi = findViewById(R.id.claasi);
 
 
 
@@ -185,9 +199,64 @@ public class MainActivity extends AppCompatActivity {
                 setMap(dic);
                 String p = graphWeighted.DijkstraShortestPath(s, d, getApplicationContext());
                 path.setText(p);
+
+
+                final String piAddr = "http://192.168.43.120:8081/";
+                webview = (WebView) findViewById(R.id.streamview);
+                //webview = new WebView(getApplicationContext());
+                webview.getSettings().setJavaScriptEnabled(true);
+                webview.getSettings().setAllowFileAccess(true);
+                webview.getSettings().setPluginState(WebSettings.PluginState.ON);
+                webview.getSettings().setDomStorageEnabled(true);
+                webview.getSettings().setAllowContentAccess(true);
+                webview.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+                webview.zoomOut();
+                webview.clearSslPreferences();
+                // webview.setWebChromeClient(new MyWebChromeClient());
+                webview.loadUrl(piAddr);
+
+                webview.setWebViewClient(new WebViewClient() {
+
+                    @Override
+                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                        return false;
+                    }
+
+                    @Override
+                    public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                        super.onPageStarted(view, url, favicon);
+                    }
+
+                    @Override
+                    public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                        handler.proceed();
+                    }
+
+                    @Override
+                    public void onPageFinished(WebView view, String url) {
+                        super.onPageFinished(view, url);
+                    }
+                });
+
             }
 
         });
+
+        classi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                com.makor.hotornot.Classif.init(getApplicationContext());
+                Picture picture = webview.capturePicture();
+                PictureDrawable pd = new PictureDrawable(picture);
+                Bitmap bt = Bitmap.createBitmap(pd.getIntrinsicWidth(), pd.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(bt);
+                canvas.drawPicture(pd.getPicture());
+                com.makor.hotornot.Classif.classifyPhoto(getApplicationContext(),bt);
+            }
+        }
+        );
+
+
     }
     public static HashMap getmap(){
         return dic;
