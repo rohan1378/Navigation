@@ -65,6 +65,7 @@ public class GraphWeighted {
         // keep a "pointer" to the parent node of each node, and we follow that
         // path to the start
         String path = null;
+        String newpath = null;
         mDatabaseHelper = new Database(context);
 
         HashMap<NodeWeighted, NodeWeighted> changedAt = new HashMap<>();
@@ -110,7 +111,7 @@ public class GraphWeighted {
                 System.out.println("The path with the smallest weight between "
                         + start.name + " and " + end.name + " is:");
 
-                Toast toast1 =  Toast.makeText(context, "The path with the smallest weight between "
+                Toast toast1 = Toast.makeText(context, "The path with the smallest weight between "
                         + start.name + " and " + end.name + " is:", Toast.LENGTH_LONG);
                 toast1.show();
 
@@ -125,36 +126,60 @@ public class GraphWeighted {
                     if (parent == null) {
                         break;
                     }
-                        String Des = null;
-                        int check=0;
+                    String Des = null;
+                    int check = 0;
 
-                        if (check == 0)
-                        {
-                            Des = currentNode.name.toString();
-                            check ++;
-                        }
+                    if (check == 0) {
+                        Des = currentNode.name.toString();
+                        check++;
+                    }
 
-                        if (check>0)
-                        {
-                            Des = child.name;
-                        }
+                    if (check > 0) {
+                        Des = child.name;
+                    }
 
 
-                        String dw = null;
+                    String dw = null;
 
-                        Cursor k = mDatabaseHelper.getItemDirection(parent.name, Des);
-                        if (k.moveToFirst()) // data?
-                        {
-                            dw = k.getString(k.getColumnIndex("Direction"));
-                        }
-                        k.close();
-                        path = parent.name  + " " + dw + " "+ path;
-                        child = parent;
+                    Cursor k = mDatabaseHelper.getItemDirection(parent.name, Des);
+                    if (k.moveToFirst()) // data?
+                    {
+                        dw = k.getString(k.getColumnIndex("Direction"));
+                    }
+                    k.close();
+                    path = parent.name + " " + dw + " " + path;
+                    child = parent;
 
                 }
-
-                System.out.println(path);
-                Toast toast2 =  Toast.makeText(context, path , Toast.LENGTH_LONG);
+                HashMap h =  MainActivity.getmap();
+                String[] splited = path.split("\\s+");
+                System.out.println("Path w/o spaces and num " + splited+ "\n");
+                int ite = Character.getNumericValue(path.charAt(0));
+                newpath = h.get(ite) + "\n";
+                for (int k = 1; k < splited.length; k++)
+                {
+                    if(splited[k].length()==1) {
+                        char p = splited[k].charAt(0);
+                        if (Character.isAlphabetic(p)) {
+                            if (p == 'S')
+                                newpath = newpath + "Go Straight -";
+                            else if (p == 'L')
+                                newpath = newpath + "Take a Left -";
+                            else
+                                newpath = newpath + "Take a Right -";
+                        }
+                        else if (Character.isDigit(p)) {
+                            int in = Character.getNumericValue(p);
+                            newpath = newpath + (h.get(in)) + "\n";
+                        }
+                    }
+                    else{
+                        int in = Integer.parseInt(splited[k]);
+                        newpath = newpath + (h.get(in)) + "\n";
+                    }
+                }
+                //System.out.println("New Path "+ newpath);
+                Toast toast2 =  Toast.makeText(context, newpath , Toast.LENGTH_LONG);
                 toast2.show();
 
 

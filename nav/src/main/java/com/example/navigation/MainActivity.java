@@ -1,5 +1,7 @@
 package com.example.navigation;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -8,9 +10,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.Set;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -19,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     EditText src;
     EditText des;
     TextView path;
+    public static HashMap<Integer, String> dic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +120,33 @@ public class MainActivity extends AppCompatActivity {
                 map.put(19, nineteen);
                 map.put(20, twenty);
 
+                HashMap<Integer, String> dic = new HashMap<>();
+                dic.put(1, "Marcus back entrance from entrance");
+                dic.put(2, "Marcus back entrance from middle of atrium");
+                dic.put(3, "Entrance to hallway");
+                dic.put(4, "Hallway next to Mens bathroom");
+                dic.put(5, "Hallway next to Womens bathroom");
+                dic.put(6, "Mens bathroom");
+                dic.put(7, "Midpoint in the hallway");
+                dic.put(8, "Womens bathroom");
+                dic.put(9, "End of hallway");
+                dic.put(10, "Staircase");
+                dic.put(11, "Marston entrance");
+                dic.put(12, "Front entrance of Marcus");
+                dic.put(13, "Marcus 131");
+                dic.put(14, "Hallway to Marcus atrium");
+                dic.put(15, "Hallway to Mens bathroom 2");
+                dic.put(16, "Hallway to Womens bathroom 2");
+                dic.put(17, "Hallway next to poster wale");
+                dic.put(18, "End of hallway");
+                dic.put(19, "Marston entrance 2");
+                dic.put(20, "Graduate centre entrance");
+
+
+
+
+
+
 
                 final NodeWeighted s;
                 final NodeWeighted d ;
@@ -128,8 +161,10 @@ public class MainActivity extends AppCompatActivity {
                 mDatabaseHelper.addData("3", "4", 2.0,"S");
                 mDatabaseHelper.addData("4", "5", 2.0,"S");
                 mDatabaseHelper.addData("5", "6", 3.0,"R");
+                mDatabaseHelper.addData("6", "14", 3.0,"R");
                 mDatabaseHelper.addData("5", "7", 2.0,"S");
                 mDatabaseHelper.addData("7", "8", 2.0,"R");
+                mDatabaseHelper.addData("8", "15", 3.0,"R");
                 mDatabaseHelper.addData("7", "9", 2.0,"S");
                 mDatabaseHelper.addData("9", "10", 2.0,"R");
                 mDatabaseHelper.addData("9", "11", 2.0,"L");
@@ -147,11 +182,19 @@ public class MainActivity extends AppCompatActivity {
                 mDatabaseHelper.addData("17", "18", 2.0,"S");
                 mDatabaseHelper.addData("18", "19", 2.0,"L");
                 //DATABASE STUFF
-
+                setMap(dic);
                 String p = graphWeighted.DijkstraShortestPath(s, d, getApplicationContext());
                 path.setText(p);
             }
 
         });
     }
+    public static HashMap getmap(){
+        return dic;
+    }
+    public void setMap(HashMap dic){
+        this.dic = dic;
+    }
+
+
 }
