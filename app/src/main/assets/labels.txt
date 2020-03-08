@@ -1,0 +1,29 @@
+Main Atrium - Exit
+Main Atrium - Gunness Student Center
+Main Atrium - Entry
+Main Atrium - CEI Hub
+Hallway Entrance
+2b
+Marcus 131
+Marcus 131 - Exit
+Corridor - A
+Mens Restroom
+Corridor - A exit
+Corridor - A wall
+Corridor B - entrance
+Womens Restroom
+Alley - B exit
+Corridor - B Wall
+Corridor - C entrance
+Drinking Fountain
+Corridor - C exit
+Corridor - C Wall
+Marston Entrance - Door
+Marston Entrance - Wall
+Marston Entrance - Exit
+Marston Entrance - Corridor
+7a
+7b
+Graduate Hub - Wall
+Graduate Hub - Entrance
+
