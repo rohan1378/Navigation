@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Picture;
@@ -18,7 +19,7 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import  java.util.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -29,6 +30,7 @@ import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
     Database mDatabaseHelper;
+    Button act2;
     Button submit;
     Button classi;
     EditText src;
@@ -36,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
     TextView path;
     WebView webview;
     public static HashMap<Integer, String> dic;
+    public  static String s2,d2;
+    public int source=1;
+    public int dest=1;
+    public  String p;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +52,117 @@ public class MainActivity extends AppCompatActivity {
         submit = findViewById(R.id.getData);
         path = findViewById(R.id.output);
         classi = findViewById(R.id.claasi);
-
-
+        act2 = findViewById(R.id.act2);
 
         mDatabaseHelper = new Database(this);
+
+
+
+
+
+
+        final HashMap<Integer, String> dic = new HashMap<>();
+        dic.put(1, "Marcus Exit from main atrium (Marcus exit A)*");
+        dic.put(2, "Guinness Student Center");
+        dic.put(3, "CEI HUB");
+        dic.put(4, "Marcus Entrance from Main Atrium (Marcus Entrance A)*");
+        dic.put(5, "Marcus exit from past the pillars (Marcus exit B) *");
+        dic.put(6, "Marcus 131");
+        dic.put(7, "Hallway Entrance");
+        dic.put(8, "Marcus Entrance from past the pillars (Marcus Entrance B)*");
+        dic.put(9, "Men’s Restroom");
+        dic.put(10, "Wall opposite Mens Restroom");
+        dic.put(11, "Women’s Restroom");
+        dic.put(12, "Wall opposite Womens RestroomF");
+        dic.put(13, "Water fountain (Entrance to stairs)");
+        dic.put(14, "Bulletin Board opposite water fountain");
+        dic.put(15, "Entrance to Graduate Hub");
+        dic.put(16, "Doorway to Staircase");
+        dic.put(17, "Bulletin Board Wall (Hallway to Marston)");
+        dic.put(18, "Engineering Graduate Hub Back entrance");
+        dic.put(19, "Entrance to Marston");
+        dic.put(20, "Wall with the photo (On the way back from entrance to Marston)");
+
+        setMap(dic);
+
+
+        final String piAddr = "http://192.168.43.120:8081/";
+        webview = (WebView) findViewById(R.id.streamview);
+        //webview = new WebView(getApplicationContext());
+        webview.getSettings().setJavaScriptEnabled(true);
+        webview.getSettings().setAllowFileAccess(true);
+        webview.getSettings().setPluginState(WebSettings.PluginState.ON);
+        webview.getSettings().setDomStorageEnabled(true);
+        webview.getSettings().setAllowContentAccess(true);
+        webview.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        webview.zoomOut();
+        webview.clearSslPreferences();
+        // webview.setWebChromeClient(new MyWebChromeClient());
+        webview.loadUrl(piAddr);
+
+        webview.setWebViewClient(new WebViewClient() {
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                return false;
+            }
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+            }
+
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                handler.proceed();
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+            }
+        });
+
+
+        classi.setOnClickListener(new View.OnClickListener() {
+                                      @Override
+                                      public void onClick(View view) {
+
+                                          int clsource;
+                                        /*
+                                          try {
+                                          com.makor.hotornot.Classif.init(getApplicationContext());
+                                          Picture picture = webview.capturePicture();
+                                          PictureDrawable pd = new PictureDrawable(picture);
+                                          Bitmap bt = Bitmap.createBitmap(pd.getIntrinsicWidth(), pd.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+                                          Canvas canvas = new Canvas(bt);
+                                          canvas.drawPicture(pd.getPicture());
+                                          String classres = String.valueOf(com.makor.hotornot.Classif.classifyPhoto(getApplicationContext(),bt));
+                                          classres = classres.substring(classres.indexOf("="), classres.indexOf(","));
+                                          clsource = getKeyByValue(dic, classres);
+                                          }
+                                          catch (NullPointerException e) {
+                                              clsource = 1;
+                                          }
+
+
+                                         */
+                                          src= (EditText) findViewById(R.id.src);
+                                          src.setText("1");
+                                      }
+                                  }
+        );
+
+
+        act2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openact2();
+            }
+        });
+
+
+
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -108,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                 //To parse in source and dest later
-                src= (EditText) findViewById(R.id.src);
+                //src= (EditText) findViewById(R.id.src);
                 des = (EditText) findViewById(R.id.des);
                 int source = Integer.parseInt(src.getText().toString());
                 int dest = Integer.parseInt(des.getText().toString());
@@ -134,40 +247,13 @@ public class MainActivity extends AppCompatActivity {
                 map.put(19, nineteen);
                 map.put(20, twenty);
 
-                HashMap<Integer, String> dic = new HashMap<>();
-                dic.put(1, "Marcus back entrance from entrance");
-                dic.put(2, "Marcus back entrance from middle of atrium");
-                dic.put(3, "Entrance to hallway");
-                dic.put(4, "Hallway next to Mens bathroom");
-                dic.put(5, "Hallway next to Womens bathroom");
-                dic.put(6, "Mens bathroom");
-                dic.put(7, "Midpoint in the hallway");
-                dic.put(8, "Womens bathroom");
-                dic.put(9, "End of hallway");
-                dic.put(10, "Staircase");
-                dic.put(11, "Marston entrance");
-                dic.put(12, "Front entrance of Marcus");
-                dic.put(13, "Marcus 131");
-                dic.put(14, "Hallway to Marcus atrium");
-                dic.put(15, "Hallway to Mens bathroom 2");
-                dic.put(16, "Hallway to Womens bathroom 2");
-                dic.put(17, "Hallway next to poster wale");
-                dic.put(18, "End of hallway");
-                dic.put(19, "Marston entrance 2");
-                dic.put(20, "Graduate centre entrance");
-
-
-
-
-
-
 
                 final NodeWeighted s;
                 final NodeWeighted d ;
 
+                // USER INPUT for destination
                 s = map.get(source);
                 d = map.get(dest);
-                // USER INPUT
 
                 //DATABASE STUFF
                 mDatabaseHelper.addData("1", "2", 2.0,"S");
@@ -196,65 +282,19 @@ public class MainActivity extends AppCompatActivity {
                 mDatabaseHelper.addData("17", "18", 2.0,"S");
                 mDatabaseHelper.addData("18", "19", 2.0,"L");
                 //DATABASE STUFF
-                setMap(dic);
+
+
                 String p = graphWeighted.DijkstraShortestPath(s, d, getApplicationContext());
                 path.setText(p);
 
 
-                final String piAddr = "http://192.168.43.120:8081/";
-                webview = (WebView) findViewById(R.id.streamview);
-                //webview = new WebView(getApplicationContext());
-                webview.getSettings().setJavaScriptEnabled(true);
-                webview.getSettings().setAllowFileAccess(true);
-                webview.getSettings().setPluginState(WebSettings.PluginState.ON);
-                webview.getSettings().setDomStorageEnabled(true);
-                webview.getSettings().setAllowContentAccess(true);
-                webview.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-                webview.zoomOut();
-                webview.clearSslPreferences();
-                // webview.setWebChromeClient(new MyWebChromeClient());
-                webview.loadUrl(piAddr);
 
-                webview.setWebViewClient(new WebViewClient() {
-
-                    @Override
-                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                        return false;
-                    }
-
-                    @Override
-                    public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                        super.onPageStarted(view, url, favicon);
-                    }
-
-                    @Override
-                    public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                        handler.proceed();
-                    }
-
-                    @Override
-                    public void onPageFinished(WebView view, String url) {
-                        super.onPageFinished(view, url);
-                    }
-                });
 
             }
 
         });
 
-        classi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                com.makor.hotornot.Classif.init(getApplicationContext());
-                Picture picture = webview.capturePicture();
-                PictureDrawable pd = new PictureDrawable(picture);
-                Bitmap bt = Bitmap.createBitmap(pd.getIntrinsicWidth(), pd.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-                Canvas canvas = new Canvas(bt);
-                canvas.drawPicture(pd.getPicture());
-                com.makor.hotornot.Classif.classifyPhoto(getApplicationContext(),bt);
-            }
-        }
-        );
+
 
 
     }
@@ -264,6 +304,30 @@ public class MainActivity extends AppCompatActivity {
     public void setMap(HashMap dic){
         this.dic = dic;
     }
+    public static <T, E> T getKeyByValue(Map<T, E> map, E value) {
+        for (Map.Entry<T, E> entry : map.entrySet()) {
+            if (Objects.equals(value, entry.getValue())) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
 
+
+    public  void openact2() {
+        //Send data to act2
+        src=  findViewById(R.id.src);
+        des = findViewById(R.id.des);
+        int source2 = Integer.parseInt(src.getText().toString());
+        int dest2 = Integer.parseInt(des.getText().toString());
+        Bundle extras = new Bundle();
+        extras.putInt("source", source2);
+        extras.putInt("dest", dest2);
+        Intent intent = new Intent(this, MainActivity2.class);
+
+        intent.putExtras(extras);
+
+        startActivity(intent);
+    }
 
 }
